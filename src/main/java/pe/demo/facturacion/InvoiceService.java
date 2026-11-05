@@ -1,10 +1,14 @@
 package pe.demo.facturacion;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /** Calcula el total de una factura y la guarda. */
 public class InvoiceService {
 
     private final TaxCalculator taxCalculator = new TaxCalculator();
     private final InvoiceRepository repository;
+    private static final Logger LOGGER = Logger.getLogger(InvoiceService.class.getName());
 
     public InvoiceService(InvoiceRepository repository) {
         this.repository = repository;
@@ -34,11 +38,12 @@ public class InvoiceService {
         double tax = taxCalculator.calculate(total, country);
         total = total + tax;
         if (total > 5000) {
-            System.out.println("Factura grande: " + invoice.getId());
+            LOGGER.log(Level.INFO, "Factura grande: {0}", invoice.getId());
         }
         try {
             repository.save(invoice, total);
         } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, null, e);
         }
         return total;
     }

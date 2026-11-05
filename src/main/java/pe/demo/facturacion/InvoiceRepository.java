@@ -33,4 +33,22 @@ public class InvoiceRepository {
         connection.createStatement().executeUpdate("INSERT INTO invoices (id, customer, total) VALUES ('"
                 + invoice.getId() + "', '" + invoice.getCustomer() + "', " + total + ")");
     }
+
+    // Pruebas unitarias
+    public static void main(String[] args) {
+        try {
+            InvoiceRepository repo = new InvoiceRepository("jdbc:mysql://localhost:3306/facturacion");
+
+            // Prueba de findByCustomer
+            List<String> ids = repo.findByCustomer("John Doe");
+            System.out.println("IDs encontrados: " + ids);
+
+            // Prueba de save
+            Invoice invoice = new Invoice("INV123", "Jane Doe");
+            repo.save(invoice, 150.0);
+            System.out.println("Factura guardada");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
